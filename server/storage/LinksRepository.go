@@ -1,6 +1,9 @@
 package storage
 
-import "github.com/jmoiron/sqlx"
+import (
+	"csuProject/server/models"
+	"github.com/jmoiron/sqlx"
+)
 
 type LinkRepository struct {
 	db *sqlx.DB
@@ -19,11 +22,15 @@ func (l LinkRepository) CreateLink(link string) (int, error) {
 	return id, nil
 }
 
-func (l LinkRepository) GetLink(id int) (string, error) {
-	var link string
-	err := l.db.Get(&link, "select link from distr.Links where id=$1", id)
+func (l LinkRepository) GetLink(id int) (models.Link, error) {
+	var link models.Link
+	err := l.db.Get(&link, "select * from distr.Links where id=$1", id)
 	if err != nil {
-		return "", err
+		return models.Link{}, err
 	}
 	return link, nil
+}
+
+func (l LinkRepository) UpdateLink(id int, status string) {
+	l.db.QueryRow("UPDATE distr.Links SET status=$1 WHERE id=$2", status, id)
 }

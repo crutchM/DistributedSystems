@@ -1,10 +1,14 @@
 package storage
 
-import "github.com/jmoiron/sqlx"
+import (
+	"csuProject/server/models"
+	"github.com/jmoiron/sqlx"
+)
 
 type LinksRepo interface {
 	CreateLink(link string) (int, error)
-	GetLink(id int) (string, error)
+	GetLink(id int) (models.Link, error)
+	UpdateLink(id int, status string)
 }
 
 type Repository struct {

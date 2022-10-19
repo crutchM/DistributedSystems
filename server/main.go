@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"csuProject/server"
+	"csuProject/server/sys"
 	"csuProject/server/storage"
 	_ "github.com/lib/pq"
 )

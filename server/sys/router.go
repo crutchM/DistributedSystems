@@ -28,17 +28,17 @@ func (s *Router) getLink(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"error_reason": "неверные параметры запроса",
-		})
+			})
 		return
 	}
 	link, err := s.Repo.GetLink(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"error": err.Error(),
-		})
+			})
 		return
 	}
-	c.JSON(http.StatusOK, map[string]string{
+	c.JSON(http.StatusOK, map[string]interface{}{
 		"link": link,
 	})
 }
@@ -59,4 +59,19 @@ func (s *Router) CreateLink(c *gin.Context) {
 
 func hello(c *gin.Context) {
 	c.Writer.Write([]byte("<h1>hello world!!<h1>"))
+}
+
+func (s *Router) UpdateLink(c *gin.Context){
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"error_reason": "неверные параметры запроса: id",
+			})
+		return
+	}
+	url :=c.Param("url")
+	s.Repo.UpdateLink(id, url)
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"message":"ok",
+	})
 }

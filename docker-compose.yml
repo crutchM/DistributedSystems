@@ -14,11 +14,16 @@ services:
     ports:
       - "5431:5432"
   web:
-    build: .
+    build: ./server
     command: ./main
     ports:
       - "8080:8080"
     links:
       - db
+      - consumer
     depends_on:
       - db
+
+  consumer:
+    build: ./consume
+    command: ./main
