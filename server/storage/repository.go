@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"csuProject/server/models"
+	"csuProject/models"
 	"github.com/jmoiron/sqlx"
 )
 

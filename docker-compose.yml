@@ -13,6 +13,20 @@ services:
       - .:/var/lib/postgresql/data
     ports:
       - "5431:5432"
+
+  rabbit:
+    image: rabbitmq:management
+    hostname: rabbit
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: myuser
+      RABBITMQ_DEFAULT_PASS: 22334455
+
+
+
+
   web:
     build: ./server
     command: ./main
@@ -20,10 +34,19 @@ services:
       - "8080:8080"
     links:
       - db
-      - consumer
+      - rabbit
     depends_on:
       - db
+      - rabbit
+    restart: on-failure
 
   consumer:
     build: ./consume
     command: ./main
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
+    restart: on-failure
+
+

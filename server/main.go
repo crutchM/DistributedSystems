@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"csuProject/server/sys"
-	"csuProject/server/storage"
+	"csuProject/storage"
+	server "csuProject/sys"
 	_ "github.com/lib/pq"
 )
 
@@ -14,9 +14,10 @@ func main() {
 		log.Fatalln(err)
 	}
 	repo := storage.NewRepository(db)
-	handler := server.Router{Repo: repo}
+	provider := server.NewProvider()
+	handler := server.Router{Repo: repo, Provider: provider}
 	serv := new(server.HttpService)
-	if err := serv.Run("8080", handler.InitRoutes()); err != nil {
+	if err := serv.Run("8081", handler.InitRoutes()); err != nil {
 		log.Fatalln(err)
 	}
 }
